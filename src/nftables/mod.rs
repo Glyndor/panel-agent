@@ -285,6 +285,28 @@ table inet {TABLE} {{
     out
 }
 
+fn run_nft(ruleset: &str) -> Result<()> {
+    let mut child = Command::new("nft")
+        .args(["-f", "-"])
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .context("spawn nft")?;
+
+    use std::io::Write;
+    if let Some(stdin) = child.stdin.take() {
+        let mut stdin = stdin;
+        stdin
+            .write_all(ruleset.as_bytes())
+            .context("write nft stdin")?;
+    }
+
+    let status = child.wait().context("wait nft")?;
+    if !status.success() {
+        anyhow::bail!("nft exited with: {status}");
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -654,26 +676,4 @@ mod tests {
         assert!(EMERGENCY_RULESET.contains("destroy table inet lynx-agent"));
         assert!(EMERGENCY_RULESET.contains("add table inet lynx-agent"));
     }
-}
-
-fn run_nft(ruleset: &str) -> Result<()> {
-    let mut child = Command::new("nft")
-        .args(["-f", "-"])
-        .stdin(std::process::Stdio::piped())
-        .spawn()
-        .context("spawn nft")?;
-
-    use std::io::Write;
-    if let Some(stdin) = child.stdin.take() {
-        let mut stdin = stdin;
-        stdin
-            .write_all(ruleset.as_bytes())
-            .context("write nft stdin")?;
-    }
-
-    let status = child.wait().context("wait nft")?;
-    if !status.success() {
-        anyhow::bail!("nft exited with: {status}");
-    }
-    Ok(())
 }

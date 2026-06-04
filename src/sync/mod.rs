@@ -20,6 +20,13 @@ pub struct AuditEntry {
 const BATCH_SIZE: i64 = 100;
 const SYNC_INTERVAL_SECS: u64 = 60;
 
+// Compile-time guards: both constants shape the sync loop and must stay positive.
+const _: () = assert!(BATCH_SIZE > 0, "BATCH_SIZE must be greater than zero");
+const _: () = assert!(
+    SYNC_INTERVAL_SECS > 0,
+    "SYNC_INTERVAL_SECS must be greater than zero"
+);
+
 pub async fn run_sync_task(state: AppState) {
     let Some(dashboard_url) = &state.config.dashboard_url else {
         warn!("DASHBOARD_URL not set — audit log sync disabled");
@@ -136,22 +143,11 @@ mod tests {
     // containers in CI, not unit tests.
     //
     // What we CAN test here:
-    //   • Module-level constants used to shape behaviour
     //   • URL construction pattern (pure string formatting)
     //   • AuditEntry struct is serialisable (compile-time guarantee via Serialize)
-
-    #[test]
-    fn batch_size_is_positive() {
-        assert!(BATCH_SIZE > 0, "BATCH_SIZE must be greater than zero");
-    }
-
-    #[test]
-    fn sync_interval_is_positive() {
-        assert!(
-            SYNC_INTERVAL_SECS > 0,
-            "SYNC_INTERVAL_SECS must be greater than zero"
-        );
-    }
+    //
+    // Module-level constants (BATCH_SIZE, SYNC_INTERVAL_SECS) are guarded by
+    // compile-time `const` assertions next to their definitions.
 
     #[test]
     fn sync_url_format_includes_agent_id_and_path() {
