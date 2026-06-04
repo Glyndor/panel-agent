@@ -184,6 +184,38 @@ fn command_exists(cmd: &str) -> bool {
         .unwrap_or(false)
 }
 
+async fn notify_dashboard(state: &AppState, software: &str, detail: &str) {
+    // Best-effort: write to agent_events via audit log sync if dashboard is reachable.
+    // This is fire-and-forget — lockdown/removal path doesn't block on this.
+    let _ = crate::audit::append(
+        &state.db,
+        crate::audit::AuditEntry {
+            agent_id: state.config.agent_id,
+            organization_id: None,
+            user_id: None,
+            command_type: "conflicting_software_detected",
+            result: crate::audit::AuditResult::Failed,
+            error: Some(format!("{software}: {detail}")),
+        },
+    )
+    .await;
+}
+
+async fn record_audit(state: &AppState, software: &str, action: &str) {
+    let _ = crate::audit::append(
+        &state.db,
+        crate::audit::AuditEntry {
+            agent_id: state.config.agent_id,
+            organization_id: None,
+            user_id: None,
+            command_type: "conflicting_software_removed",
+            result: crate::audit::AuditResult::Success,
+            error: Some(format!("{software}: {action}")),
+        },
+    )
+    .await;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -297,36 +329,4 @@ mod tests {
             "lynx_definitely_not_a_real_command_xyz_12345"
         ));
     }
-}
-
-async fn notify_dashboard(state: &AppState, software: &str, detail: &str) {
-    // Best-effort: write to agent_events via audit log sync if dashboard is reachable.
-    // This is fire-and-forget — lockdown/removal path doesn't block on this.
-    let _ = crate::audit::append(
-        &state.db,
-        crate::audit::AuditEntry {
-            agent_id: state.config.agent_id,
-            organization_id: None,
-            user_id: None,
-            command_type: "conflicting_software_detected",
-            result: crate::audit::AuditResult::Failed,
-            error: Some(format!("{software}: {detail}")),
-        },
-    )
-    .await;
-}
-
-async fn record_audit(state: &AppState, software: &str, action: &str) {
-    let _ = crate::audit::append(
-        &state.db,
-        crate::audit::AuditEntry {
-            agent_id: state.config.agent_id,
-            organization_id: None,
-            user_id: None,
-            command_type: "conflicting_software_removed",
-            result: crate::audit::AuditResult::Success,
-            error: Some(format!("{software}: {action}")),
-        },
-    )
-    .await;
 }

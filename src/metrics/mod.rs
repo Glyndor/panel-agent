@@ -180,6 +180,23 @@ fn parse_kb(line: &str) -> u64 {
         .unwrap_or(0)
 }
 
+fn read_disk_gb(mount: &str) -> (f64, f64) {
+    use nix::sys::statvfs::statvfs;
+    match statvfs(mount) {
+        Ok(stat) => {
+            let block = stat.block_size();
+            let total = stat.blocks() * block;
+            let avail = stat.blocks_available() * block;
+            let used = total.saturating_sub(avail);
+            (
+                used as f64 / 1_073_741_824.0,
+                total as f64 / 1_073_741_824.0,
+            )
+        }
+        Err(_) => (0.0, 0.0),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -361,22 +378,5 @@ mod tests {
             timestamp: 0,
         };
         assert_eq!(m.msg_type, "container_metrics");
-    }
-}
-
-fn read_disk_gb(mount: &str) -> (f64, f64) {
-    use nix::sys::statvfs::statvfs;
-    match statvfs(mount) {
-        Ok(stat) => {
-            let block = stat.block_size();
-            let total = stat.blocks() * block;
-            let avail = stat.blocks_available() * block;
-            let used = total.saturating_sub(avail);
-            (
-                used as f64 / 1_073_741_824.0,
-                total as f64 / 1_073_741_824.0,
-            )
-        }
-        Err(_) => (0.0, 0.0),
     }
 }
