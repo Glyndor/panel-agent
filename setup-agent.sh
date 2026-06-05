@@ -581,7 +581,7 @@ log_ok "$LYNX_DIR"
 
 log_section "Downloading lynx-agent binary"
 
-GITHUB_REPO="Jaro-c/Lynx"
+GITHUB_REPO="Glyndor/panel-agent"
 RELEASE_VERIFY_KEY_B64="OsBV4t+vQSn10FAI8UzAJEBS0IUqp8D2bZtlQYD8j+Q="
 
 _ARCH=$(uname -m)
@@ -621,10 +621,10 @@ else
 import sys, json
 releases = json.load(sys.stdin)
 tags = [r['tag_name'] for r in releases
-        if r.get('tag_name','').startswith('agent@')
+        if r.get('tag_name','').startswith('v')
         and not r.get('prerelease') and not r.get('draft')]
 if tags:
-    def ver(t): return tuple(int(x) for x in t.split('@')[1].split('.'))
+    def ver(t): return tuple(int(x) for x in t.lstrip('v').split('.'))
     print(max(tags, key=ver))
 " 2>/dev/null)
 
@@ -879,8 +879,8 @@ PG_PASS="$("$BINARY_PATH" gen-rand 32)"
 # --- Download agent binary from GitHub Releases ----------------------------
 
 # Agent binary already downloaded earlier — version file gets written below.
-printf '%s' "${LATEST_AGENT_TAG#agent@}" > "$BIN_DIR/lynx-agent-version"
-log_ok "Version: ${LATEST_AGENT_TAG#agent@}"
+printf '%s' "${LATEST_AGENT_TAG#v}" > "$BIN_DIR/lynx-agent-version"
+log_ok "Version: ${LATEST_AGENT_TAG#v}"
 
 # --- Write agent env file ---------------------------------------------------
 
@@ -960,7 +960,7 @@ EOF
 cat > /etc/systemd/system/lynx-agent.service << EOF
 [Unit]
 Description=Lynx Agent — infrastructure orchestration service
-Documentation=https://github.com/Jaro-c/Lynx
+Documentation=https://github.com/Glyndor/panel-agent
 After=network.target lynx-agent-postgres.service
 Requires=network.target lynx-agent-postgres.service
 
@@ -1236,5 +1236,5 @@ echo -e "  The dashboard will add this agent as a WireGuard peer to complete the
 echo ""
 echo -e "${YELLOW}Note:${RESET} The agent API is only reachable via WireGuard (${DASHBOARD_WG_IP} → ${AGENT_WG_IP}:${AGENT_PORT})."
 echo ""
-echo -e "  ${BOLD}Made with love by Jaroc${RESET} — https://github.com/Jaro-c/Lynx"
+echo -e "  ${BOLD}Made with love by Jaroc${RESET} — https://github.com/Glyndor/panel"
 echo ""
