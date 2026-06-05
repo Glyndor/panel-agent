@@ -52,7 +52,9 @@ uuid = { version = "1", features = ["v7", "serde"] }
 # system interaction
 nix = { version = "0.31", features = ["process", "signal", "fs"] }
 
-lynx-compose = { git = "https://github.com/Glyndor/podman-compose", branch = "main" }
+# Pinned to the rename commit on develop until podup cuts its first renamed
+# release on main; move back to a release ref afterwards (Glyndor/podup#15).
+podup = { git = "https://github.com/Glyndor/podup", rev = "85a518bb95b658c922c43696fa07992901ac523d" }
 
 [workspace]
 
