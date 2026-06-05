@@ -41,7 +41,7 @@ log_section() { echo -e "\n${BOLD}${CYAN}=== $* ===${RESET}"; }
 
 BIN_DIR="/etc/lynx/bin"
 BINARY_PATH="$BIN_DIR/lynx-agent"
-GITHUB_REPO="Jaro-c/Lynx"
+GITHUB_REPO="Glyndor/panel-agent"
 VERSION_FILE="$BIN_DIR/lynx-agent-version"
 FORCE=false
 
@@ -97,10 +97,10 @@ LATEST_TAG=$(curl -fsSL \
 import sys, json
 releases = json.load(sys.stdin)
 tags = [r['tag_name'] for r in releases
-        if r.get('tag_name','').startswith('agent@')
+        if r.get('tag_name','').startswith('v')
         and not r.get('prerelease') and not r.get('draft')]
 if tags:
-    def ver(t): return tuple(int(x) for x in t.split('@')[1].split('.'))
+    def ver(t): return tuple(int(x) for x in t.lstrip('v').split('.'))
     print(max(tags, key=ver))
 " 2>/dev/null)
 
@@ -109,7 +109,7 @@ if [[ -z "$LATEST_TAG" ]]; then
     exit 1
 fi
 
-LATEST_VERSION="${LATEST_TAG#agent@}"
+LATEST_VERSION="${LATEST_TAG#v}"
 log_info "Latest version:  $LATEST_VERSION"
 
 if [[ "$CURRENT_VERSION" == "$LATEST_VERSION" ]] && ! $FORCE; then
@@ -241,5 +241,5 @@ echo ""
 echo -e "  If something fails:"
 echo -e "    ${BOLD}lynx-agent logs --errors${RESET}"
 echo ""
-echo -e "  ${BOLD}Made with love by Jaroc${RESET} — https://github.com/Jaro-c/Lynx"
+echo -e "  ${BOLD}Made with love by Jaroc${RESET} — https://github.com/Glyndor/panel"
 echo ""
