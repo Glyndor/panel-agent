@@ -146,7 +146,7 @@ if [[ "$TOTAL_RAM_MB" -lt 512 ]]; then
 fi
 log_ok "RAM: ${TOTAL_RAM_MB} MB (minimum 512 MB satisfied)"
 
-# Disk pre-check (§1.4) — PostgreSQL image, agent binary, lynx-compose and
+# Disk pre-check (§1.4) — PostgreSQL image, agent binary, podup and
 # org/container data easily exceed 2 GB; bail out early instead of failing mid-
 # install when a `pull` or container start exhausts the volume.
 FREE_DISK_MB=$(df -BM --output=avail / 2>/dev/null | tail -1 | tr -dc '0-9')
