@@ -23,7 +23,7 @@ cargo build --release
 cargo test
 ```
 
-Depends on [`lynx-compose`](https://github.com/Glyndor/podman-compose) as a git
+Depends on [`podup`](https://github.com/Glyndor/podup) as a git
 dependency.
 
 ## Install

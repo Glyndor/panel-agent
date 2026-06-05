@@ -1503,7 +1503,7 @@ checksum = "112b39cec0b298b6c1999fee3e31427f74f676e4cb9879ed1a121b43661a4154"
 
 [[package]]
 name = "lynx-agent"
-version = "1.2.8"
+version = "1.3.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -1515,8 +1515,8 @@ dependencies = [
  "hex",
  "hyper",
  "hyper-util",
- "lynx-compose",
  "nix",
+ "podup",
  "rand 0.10.1",
  "rcgen",
  "reqwest",
@@ -1537,30 +1537,6 @@ dependencies = [
  "url",
  "uuid",
  "zeroize",
-]
-
-[[package]]
-name = "lynx-compose"
-version = "0.2.0"
-source = "git+https://github.com/Glyndor/podman-compose?branch=main#54e8b5c3e57f3382730458d6a53660f2a05b4b15"
-dependencies = [
- "anyhow",
- "bollard",
- "bytes",
- "clap",
- "flate2",
- "futures",
- "indexmap",
- "libc",
- "notify",
- "serde",
- "tar",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "walkdir",
- "yaml_serde",
 ]
 
 [[package]]
@@ -1867,6 +1843,30 @@ name = "plain"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
+
+[[package]]
+name = "podup"
+version = "0.3.1"
+source = "git+https://github.com/Glyndor/podup?tag=v0.3.1#3d55a3b3e62424db7bb29bf8cc474e12835be12d"
+dependencies = [
+ "anyhow",
+ "bollard",
+ "bytes",
+ "clap",
+ "flate2",
+ "futures",
+ "indexmap",
+ "libc",
+ "notify",
+ "serde",
+ "tar",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "walkdir",
+ "yaml_serde",
+]
 
 [[package]]
 name = "potential_utf"
