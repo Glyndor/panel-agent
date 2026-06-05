@@ -1846,8 +1846,8 @@ checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
 
 [[package]]
 name = "podup"
-version = "0.2.0"
-source = "git+https://github.com/Glyndor/podup?rev=85a518bb95b658c922c43696fa07992901ac523d#85a518bb95b658c922c43696fa07992901ac523d"
+version = "0.3.1"
+source = "git+https://github.com/Glyndor/podup?tag=v0.3.1#3d55a3b3e62424db7bb29bf8cc474e12835be12d"
 dependencies = [
  "anyhow",
  "bollard",
