@@ -1745,8 +1745,8 @@ checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
 
 [[package]]
 name = "podup"
-version = "0.9.0"
-source = "git+https://github.com/Glyndor/podup?tag=v0.9.0#e2ba1a73f6456542be32348d9daef162832d8a9a"
+version = "0.12.0"
+source = "git+https://github.com/Glyndor/podup?tag=v0.12.0#efd159441e11f9c50f4897ce27de9493df6e2422"
 dependencies = [
  "bytes",
  "clap",
@@ -1763,7 +1763,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml_ng",
- "sha2 0.10.9",
+ "sha2 0.11.0",
  "tar",
  "tokio",
  "tracing",
@@ -3318,7 +3318,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
